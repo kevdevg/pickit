@@ -1,5 +1,5 @@
 {
-  "name": "pickit",
+  "name": "react-blog",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,8 +14,7 @@
   "keywords": [
     "react",
     "react",
-    "pick",
-    "images",
+    "blog"
   ],
   "author": "Juan Roa",
   "license": "MIT",
