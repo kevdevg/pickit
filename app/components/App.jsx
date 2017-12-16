@@ -7,22 +7,25 @@ import {
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from '../store';
-import Nav from './Nav/Nav';
 import About from './About/About';
 import Home from './Home/Home';
+import Nav from './Nav/Nav';
 import Posts from './PostsApp/container';
 import PageNotFound from './PageNotFound/PageNotFound';
 
-const App = ({ header }) => (
+const App = () => (
   <Provider store={store}>
-    <Router>
-      <Switch>
-        <Route path='/' exact component={Home} />
-        <Route path='/about' exact component={About} />
-        <Route path='/posts' exact component={Posts} />
-        <Route component={PageNotFound}/>
-      </Switch>
-    </Router>
+    <div>
+      <Nav />
+      <Router>
+        <Switch>
+          <Route path='/' exact component={Home} />
+          <Route path='/about' exact component={About} />
+          <Route path='/posts' exact component={Posts} />
+          <Route component={PageNotFound} />
+        </Switch>
+      </Router>
+    </div>
   </Provider>
 );
 

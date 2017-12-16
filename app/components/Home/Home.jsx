@@ -6,13 +6,11 @@ import Text from './Text';
 const Home = () =>
   (
     <div>
-      <Nav />
       <h3>
         This is the home page
       </h3>
       <Text
         title="title"
-        // body="body"
       />
       <Link href='/about' label='About' />
     </div>

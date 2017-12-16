@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import { Button } from 'react-toolbox/lib/button';
-import { findIndex, set } from 'lodash/fp';
-import { fromJS, List } from 'immutable';
+import Dialog from 'react-toolbox/lib/dialog';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+
 import Post from './Post/Post';
 import PostForm from './PostForm/PostForm';
-import { endpoints } from '../../constants';
+
 
 class Posts extends Component {
 
   static propTypes = {
     fetchPosts: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired,
+    createPost: PropTypes.func.isRequired,
+    deletePost: PropTypes.func.isRequired,
     postsData: ImmutablePropTypes.map.isRequired,
-  };
+  }
 
   state = {
-    // posts: List(),
     showForm: false,
-    postToEdit: undefined,
+    post: undefined,
+    showDialog: false,
   };
 
   componentDidMount() {
@@ -29,81 +32,45 @@ class Posts extends Component {
   componentWillReceiveProps(nextProps) {
     const { fetchPosts } = this.props;
     const { postsData } = nextProps;
-    console.log(postsData.get('postsLoading'), postsData.get('refresh'));
     if (!postsData.get('postsLoading') && postsData.get('refresh')) {
-      console.log('¡Entró!');
       fetchPosts();
     }
   }
 
-  // async getPosts() {
-  //   console.log(endpoints.posts);
-  //   const response = await fetch(endpoints.posts);
-  //   const posts = await response.json();
-  //   this.setState({ posts: fromJS(posts) });
-  //   console.log(posts);
-  // }
-
   createPost = (post) => {
     const { createPost } = this.props;
-    this.setState({ showForm: false }, () => createPost(post.toJS()));
-    // const postItem = (
-    //   <Post
-    //     key={this.state.postsCount}
-    //     id={this.state.postsCount}
-    //     post={post}
-    //     editPost={this.handleEditPostForm}
-    //     deletePost={this.handleDeletePost}
-    //   />
-    // );
-    // const posts = this.state.posts.concat(postItem);
-    // this.setState({
-    //   posts,
-    //   postsCount: this.state.postsCount + 1,
-    // }, () => this.handleCloseForm());
+    createPost(post.toJS());
+    this.handleCloseForm();
   };
 
   handleEditPost = (post) => {
-    console.log("asjhdgajkhdsgj")
-    console.log("entra")
-    const postItem = (
-      <Post
-        key={post.get('id')}
-        id={post.get('id')}
-        post={post}
-        editPost={this.handleEditPostForm}
-        deletePost={this.handleDeletePost}
-      />
-    );
-    console.log(postItem);
-    console.log(post.get('id'));
-    const index = findIndex(
-      p => p.key === `${post.get('id')}`
-    )(this.state.posts)
-    const posts = set(
-      index,
-      postItem,
-      this.state.posts,
-    );
-    console.log(posts);
-    this.setState({ posts }, () => this.handleCloseForm());
-
+    const { updatePost } = this.props;
+    updatePost(post.toJS());
+    this.handleCloseForm();
   };
+
+  handleConfirmDelete = () => {
+    const { post } = this.state;
+    const { deletePost } = this.props;
+    deletePost(post.toJS());
+    this.setState({ showDialog: false });
+  }
 
   handleEditPostForm = (id, post) => {
     this.setState({
       showForm: true,
-      postToEdit: post
+      post: post
         .set('id', id)
         .set('updated_at', Date()),
     });
   };
 
 
-  handleDeletePost = (id) => {
-    const posts = this.state.posts
-      .filter(p => p.key !== `${id}`);
-    this.setState({ posts });
+  handleDeletePost = (id, post) => {
+    this.setState({
+      showDialog: true,
+      post: post.set('id', id),
+    });
   }
 
   handleShowForm = () => {
@@ -111,13 +78,18 @@ class Posts extends Component {
   };
 
   handleCloseForm = () => {
-    this.setState({ showForm: false, postToEdit: undefined });
+    this.setState({ showForm: false, post: undefined });
   };
 
+  handleCloseDialog = () => {
+    this.setState({ showDialog: false, post: undefined });
+  }
+
   render() {
-    const posts = this.props.postsData.get('posts');
-    console.log(posts);
-    const postItems = posts.map(post => (
+    const { postsData } = this.props;
+    const posts = postsData.get('posts');
+
+    const postsItems = posts.map(post => (
       <Post
         key={post.get('_id')}
         id={post.get('_id')}
@@ -127,31 +99,36 @@ class Posts extends Component {
       />
     )).toJS();
 
-    // const posts = this.state.posts.length > 0 ?
-    // (
-    //   this.state.posts
-    // ) :
-    // (
-    //   <div>
-    //     No hay posts
-    //   </div>
-    // );
+    const actions = [
+      { label: 'Cancel', onClick: this.handleCloseForm },
+      { label: 'Confirm', onClick: this.handleConfirmDelete },
+    ];
 
     return (
       <div>
-        {postItems}
+        {postsItems}
         <PostForm
           active={this.state.showForm}
           createPost={this.createPost}
           editPost={this.handleEditPost}
           closeForm={this.handleCloseForm}
-          post={this.state.postToEdit}
+          post={this.state.post}
         />
         <Button
           icon="add"
           label="Create post"
           onClick={this.handleShowForm}
         />
+
+        <Dialog
+          actions={actions}
+          active={this.state.showDialog}
+          onEscKeyDown={this.handleCloseDialog}
+          onOverlayClick={this.handleCloseDialog}
+          title="Confirmación de eliminación"
+        >
+          <p>¿Esta seguro que desea eliminar?</p>
+        </Dialog>
       </div>
     );
   }

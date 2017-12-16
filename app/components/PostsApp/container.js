@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import Posts from './Posts';
 import {
   fetchPosts,
+  updatePost,
+  deletePost,
   createPost,
 } from '../../actions';
 
@@ -12,8 +14,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => (
   bindActionCreators({
-    fetchPosts,
-    createPost,
+    fetchPosts, updatePost, deletePost, createPost,
   }, dispatch)
 );
 
