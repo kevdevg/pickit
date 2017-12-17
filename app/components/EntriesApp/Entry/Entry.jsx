@@ -8,20 +8,20 @@ import {
   CardActions } from 'react-toolbox/lib/card';
 import { IconButton } from 'react-toolbox/lib/button';
 
-const Entrance = ({ entrance }) => (
+const Entry = ({ entry }) => (
   <Card>
     <CardMedia
       aspectRatio="wide"
-      image={entrance.get('image')}
+      image={entry.get('image')}
     />
     <CardTitle
-      title={entrance.get('title')}
+      title={entry.get('title')}
     />
-    <CardText>{entrance.get('description')}</CardText>
+    <CardText>{entry.get('description')}</CardText>
     <CardActions>
-      <IconButton icon="favorite" accent={entrance.get('pick')} />
+      <IconButton icon="favorite" accent={entry.get('pick')} />
     </CardActions>
-    { entrance.get('pick') ? (
+    { entry.get('pick') ? (
       <div />
 
       )
@@ -32,8 +32,8 @@ const Entrance = ({ entrance }) => (
   </Card>
 );
 
-Entrance.propTypes = {
-  entrance: ImmutablePropTypes.map.isRequired,
+Entry.propTypes = {
+  entry: ImmutablePropTypes.map.isRequired,
 };
 
-export default Entrance;
+export default Entry;

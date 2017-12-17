@@ -23,10 +23,10 @@ export function fetchEntrances(query) {
     return fetch(`https://images-api.nasa.gov/search?q=${query}&media_type=image`, {
       method: 'GET',
     })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(receiveEntries(json.collection.items));
-      dispatch(toggleEntriesLoading());
-    });
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveEntries(json.collection.items));
+        dispatch(toggleEntriesLoading());
+      });
   };
 }

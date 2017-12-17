@@ -12,6 +12,7 @@ import Home from './Home/Home';
 import Nav from './Nav/Nav';
 import Posts from './PostsApp/container';
 import PageNotFound from './PageNotFound/PageNotFound';
+import EntrancesFromApi from './EntriesApp/EntriesFromApi/container';
 
 const App = () => (
   <Provider store={store}>
@@ -22,6 +23,7 @@ const App = () => (
           <Route path='/' exact component={Home} />
           <Route path='/about' exact component={About} />
           <Route path='/posts' exact component={Posts} />
+          <Route path='/entries-nasa' exact component={EntrancesFromApi} />
           <Route component={PageNotFound} />
         </Switch>
       </Router>
