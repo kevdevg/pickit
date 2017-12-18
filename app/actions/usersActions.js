@@ -1,15 +1,19 @@
-import { assign } from 'lodash/fp';
-import { endpoints } from '../constants';
+import {assign} from 'lodash/fp';
+import {endpoints} from '../constants';
 
-export const toggleUser = (user) => (
+export const toggleToken = (json) => (
   {
-    type: 'TOGGLE_USER',
-    user,
+    type: 'TOGGLE_TOKEN',
+    json,
   }
 );
 
 export const toggleUserLoading = () => ({
   type: 'TOGGLE_USER_LOADING',
+});
+
+export const refreshUser = () => ({
+  type: 'REFRESH_USER',
 });
 
 
@@ -18,9 +22,14 @@ export function registerUser(user) {
     dispatch(toggleUserLoading());
     return fetch(endpoints.register, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(assign({}, user)),
-    }).then(() => dispatch(toggleUserLoading()));
+    }).then(response => response.json())
+      .then(json => {
+        dispatch(toggleToken(json));
+        dispatch(toggleUserLoading());
+        dispatch(refreshUser());
+      });
   };
 }
 
@@ -29,20 +38,24 @@ export function loginUser(user) {
     dispatch(toggleUserLoading());
     return fetch(endpoints.login, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(assign({}, user)),
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(user),
     })
       .then(response => response.json())
       .then(json => {
+        dispatch(toggleToken(json));
         dispatch(toggleUserLoading());
-        dispatch(toggleUser(json));
+        dispatch(refreshUser());
       });
   };
 }
 
-
 export function logoutUser() {
   return (dispatch) => {
-    dispatch(toggleUser(undefined));
+    dispatch(toggleUserLoading());
+    dispatch(toggleToken({key: undefined}));
+    dispatch(toggleUserLoading());
+    dispatch(refreshUser());
+
   };
 }

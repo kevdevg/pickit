@@ -13,7 +13,7 @@ class CommentForm extends Component {
     createComment: PropTypes.func.isRequired,
     active: PropTypes.bool.isRequired,
     closeForm: PropTypes.func.isRequired,
-  }
+  };
 
   static commentState = () => fromJS({
     name: '',
@@ -24,7 +24,7 @@ class CommentForm extends Component {
 
   state = {
     commentState : CommentForm.commentState(),
-  }
+  };
 
   handleChange = (key, value) => {
     console.log(key, value);
@@ -37,7 +37,7 @@ class CommentForm extends Component {
   handleCreateComment = () => {
     const { createComment } =  this.props;
     createComment(this.state.commentState.toJS());
-  }
+  };
 
   render() {
     const { active, closeForm, comment } = this.props;

@@ -29,12 +29,12 @@ class PostForm extends Component {
   onTitleChange = (value) => {
     const postState = this.state.postState.set('title', value);
     this.setState({ postState });
-  }
+  };
 
   onBodyChange = (value) => {
     const postState = this.state.postState.set('body', value);
     this.setState({ postState });
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     const { post } = nextProps;

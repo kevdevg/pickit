@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import store from '../store';
 import About from './About/About';
 import Home from './Home/Home';
-import Nav from './Nav/Nav';
+import Nav from './Nav/container';
 import Posts from './PostsApp/container';
 import PageNotFound from './PageNotFound/PageNotFound';
 import EntrancesFromApi from './EntriesApp/EntriesFromApi/container';
