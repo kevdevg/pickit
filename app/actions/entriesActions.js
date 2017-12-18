@@ -17,7 +17,7 @@ export const toggleEntriesLoading = () => ({
   type: 'TOGGLE_ENTRIES_LOADING',
 });
 
-export function fetchEntrances(query) {
+export function fetchEntries(query) {
   return (dispatch) => {
     dispatch(toggleEntriesLoading());
     return fetch(`https://images-api.nasa.gov/search?q=${query}&media_type=image`, {

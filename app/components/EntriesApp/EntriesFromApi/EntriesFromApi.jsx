@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Input from 'react-toolbox/lib/input';
 import Entry from '../Entry/Entry';
+import style from './style.scss';
 
 class EntriesFromApi extends Component {
 
   static propTypes = {
-    fetchEntrances: PropTypes.func.isRequired,
+    fetchEntries: PropTypes.func.isRequired,
     entriesData: ImmutablePropTypes.map.isRequired,
   };
 
@@ -15,13 +16,18 @@ class EntriesFromApi extends Component {
     query: '',
   };
 
-  handleChangeQuery = (query) => {
-    this.setState({ query });
-    console.log(query);
+  onChangeQuery = (value) => {
+    this.setState({ query: value }, () => {
+      this.fetchEntries();
+    });
+  };
+
+  fetchEntries = () => {
+    const { fetchEntries } = this.props;
+    fetchEntries(this.state.query);
   };
 
   render() {
-    console.log(this.props);
     const entries = this.props.entriesData.get('entries');
 
     const entriesItems = entries.map(entry => (
@@ -32,9 +38,9 @@ class EntriesFromApi extends Component {
 
     return (
       <div>
-        <Input type="text" label="Parametro de busqueda" value={this.state.name} onChange={this.handleChangeQuery()} />
+        <Input type="text" label="Parametro de busqueda" value={this.state.query} onChange={this.onChangeQuery}/>
 
-        <div>
+        <div className={style.row}>
           {entriesItems}
         </div>
       </div>

@@ -7,9 +7,10 @@ import {
   CardText,
   CardActions } from 'react-toolbox/lib/card';
 import { IconButton } from 'react-toolbox/lib/button';
+import style from './style.scss';
 
 const Entry = ({ entry }) => (
-  <Card>
+  <Card className={style.entry}>
     <CardMedia
       aspectRatio="wide"
       image={entry.get('image')}

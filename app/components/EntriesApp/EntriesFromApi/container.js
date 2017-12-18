@@ -1,7 +1,7 @@
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {fetchEntrances} from '../../../actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import EntrancesFromApi from './EntriesFromApi';
+import { fetchEntries } from '../../../actions';
 
 const mapStateToProps = (state) => ({
   entriesData: state.entriesData,
@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => (
   bindActionCreators({
-    fetchEntrances,
+    fetchEntries,
   }, dispatch)
 );
 
