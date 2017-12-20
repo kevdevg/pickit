@@ -42,6 +42,7 @@ class EntriesFromApi extends Component {
     const entriesItems = entries.map(entry => (
       <Entry
         entry={entry}
+        key={entry.get('nasa_id')}
         saveEntry={this.saveEntry}
         userIsAuthenticated={userIsAuthenticated}
       />

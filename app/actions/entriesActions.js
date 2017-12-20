@@ -1,4 +1,4 @@
-import { isNil } from 'lodash/fp';
+import {isNil} from 'lodash/fp';
 import {endpoints, headers} from '../constants';
 
 export const receiveEntries = (entries) => (
@@ -11,6 +11,13 @@ export const receiveEntries = (entries) => (
 export const receiveMyEntries = (entries) => (
   {
     type: 'RECEIVE_MY_ENTRIES',
+    entries,
+  }
+);
+
+export const receiveBothEntries = (entries) => (
+  {
+    type: 'RECEIVE_BOTH_ENTRIES',
     entries,
   }
 );
@@ -48,14 +55,13 @@ export function fetchEntries(query) {
       (
         Promise.all([fetch(`https://images-api.nasa.gov/search?q=${query}&media_type=image`, {
           method: 'GET',
-        }), fetch(endpoints.entries, {
+        }).then(response => response.json()), fetch(endpoints.entries, {
           method: 'GET',
           headers: headers.headers(),
-        })]).then(data => data.map(m => m.json()))
-          .then(data => {
-            console.log(data);
-          })
-      );
+        }).then(response => response.json())])
+          .then(data => dispatch(receiveBothEntries(data))
+        )
+      )
   };
 }
 
