@@ -1,0 +1,17 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.banner {
+  flex-direction: row;
+  width: 100%;
+  height: 200px;
+}
+.nav {
+  flex-direction: row;
+  width: 100%;
+}
+.navigationLink {
+  color: white !important;
+}

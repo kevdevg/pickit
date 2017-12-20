@@ -5,10 +5,12 @@ import { fromJS } from 'immutable';
 import { isNil } from 'lodash/fp';
 import Input from 'react-toolbox/lib/input';
 import Dialog from 'react-toolbox/lib/dialog';
+import ProgressBar from 'react-toolbox/lib/progress_bar';
 
 class UserLoginForm extends Component {
   static propTypes = {
     loginUser: PropTypes.func.isRequired,
+    usersData: ImmutablePropTypes.map.isRequired,
     active: PropTypes.bool.isRequired,
     closeForm: PropTypes.func.isRequired,
   };
@@ -34,13 +36,14 @@ class UserLoginForm extends Component {
   };
 
   render() {
-    const { active, closeForm } = this.props;
+    const { active, closeForm, usersData} = this.props;
     const actions = [
       { label: "Cancel", onClick: closeForm },
       {
         label: "Login", onClick: this.handleLoginUser
       }
     ];
+    const isLoading = usersData.get('userLoading');
     return (
       <Dialog
         actions={actions}
@@ -49,18 +52,25 @@ class UserLoginForm extends Component {
         onOverlayClick={closeForm}
         title='Login'
       >
-            <Input
-              type='text'
-              label='Username'
-              value={this.state.userState.get('username')}
-              onChange={this.handleChange.bind(this, 'username')}
-            />
-            <Input
-              type='password'
-              label='Email'
-              value={this.state.userState.get('password')}
-              onChange={this.handleChange.bind(this, 'password')}
-            />
+        {
+          isLoading ?
+            <ProgressBar multicolor type="circular" mode="indeterminate" />
+            :
+            <div>
+              <Input
+                type='text'
+                label='Username'
+                value={this.state.userState.get('username')}
+                onChange={this.handleChange.bind(this, 'username')}
+              />
+              <Input
+                type='password'
+                label='Password'
+                value={this.state.userState.get('password')}
+                onChange={this.handleChange.bind(this, 'password')}
+              />
+            </div>
+        }
       </Dialog>
     )
   }

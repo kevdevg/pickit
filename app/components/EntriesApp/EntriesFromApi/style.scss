@@ -3,3 +3,26 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+.search_bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 1em;
+}
+
+.search_input {
+  flex-direction: row;
+  width: 45%;
+}
+
+.medium_entry {
+  flex-direction: row;
+  width: 45%;
+  padding: 2rem;
+  margin: 2rem;
+}
+
+.container {
+
+}

@@ -7,22 +7,26 @@ import {
   CardText,
   CardActions
 } from 'react-toolbox/lib/card';
-import {IconButton} from 'react-toolbox/lib/button';
-import style from './style.scss';
+import Button from 'react-toolbox/lib/button';
+import Tooltip from 'react-toolbox/lib/tooltip';
+
+const TooltipButton = Tooltip(Button);
 import PropTypes from "prop-types";
 
 class Entry extends Component {
 
-  handleSaveEntry = () => {
-    const { saveEntry, entry } = this.props;
-    saveEntry(entry.toJS());
+  handleToggleEntry = () => {
+    const { saveEntry, entry, deleteEntry } = this.props;
+    entry.get('pick') ?
+      saveEntry(entry.toJS()) :
+      deleteEntry(entry.toJS())
   };
 
   render(){
-    const { userIsAuthenticated, entry } = this.props;
+    const { userIsAuthenticated, entry, className } = this.props;
 
     return (
-      <Card className={style.entry}>
+      <Card className={className}>
         <CardMedia
           aspectRatio="wide"
           image={entry.get('image')}
@@ -33,7 +37,11 @@ class Entry extends Component {
         <CardText>{entry.get('description')}</CardText>
         {userIsAuthenticated ? (
             <CardActions>
-              <IconButton onClick={this.handleSaveEntry} icon="favorite" accent={entry.get('pick')}/>
+              <TooltipButton
+                icon='favorite'
+                accent={entry.get('pick')}
+                tooltip={entry.get('pick') ? 'Tap to delete' : 'Tap to save'}
+              />
             </CardActions>
           )
           : (
@@ -48,6 +56,7 @@ class Entry extends Component {
 Entry.propTypes = {
   entry: ImmutablePropTypes.map.isRequired,
   saveEntry: PropTypes.func,
+  deleteEntry: PropTypes.func,
   userIsAuthenticated: PropTypes.bool,
 };
 

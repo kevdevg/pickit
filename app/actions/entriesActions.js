@@ -59,20 +59,31 @@ export function fetchEntries(query) {
           method: 'GET',
           headers: headers.headers(),
         }).then(response => response.json())])
-          .then(data => dispatch(receiveBothEntries(data))
-        )
+          .then(data => {
+            dispatch(receiveBothEntries(data));
+            dispatch(toggleEntriesLoading());
+          })
       )
   };
 }
 
+export function deleteEntry(entry) {
+  return (dispatch) => {
+    dispatch(toggleMyEntriesLoading());
+    return fetch(`${endpoints.entries}/${entry.id}/`, {
+      method: 'DELETE',
+      headers: headers.headers(),
+    })
+      .then(response => {
+        dispatch(toggleMyEntriesLoading());
+        dispatch(refreshMyEntries());
+      });
+  };
+}
 
 export function saveEntry(entry) {
   return (dispatch) => {
     dispatch(toggleMyEntriesLoading());
-
-    console.log(entry);
-    console.log(headers.headers());
-    console.log(JSON.stringify(entry));
     return fetch(endpoints.entries, {
       method: 'POST',
       headers: headers.headers(),
