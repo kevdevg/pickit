@@ -1,5 +1,5 @@
-import assign from 'lodash/fp/assign';
-import { endpoints, headers } from '../constants';
+import { isNil } from 'lodash/fp';
+import {endpoints, headers} from '../constants';
 
 export const receiveEntries = (entries) => (
   {
@@ -10,7 +10,7 @@ export const receiveEntries = (entries) => (
 
 export const receiveMyEntries = (entries) => (
   {
-    type: 'RECEIVE_ENTRIES',
+    type: 'RECEIVE_MY_ENTRIES',
     entries,
   }
 );
@@ -33,31 +33,32 @@ export const toggleMyEntriesLoading = () => ({
 export function fetchEntries(query) {
   return (dispatch) => {
     dispatch(toggleEntriesLoading());
-    return fetch(`https://images-api.nasa.gov/search?q=${query}&media_type=image`, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(json => {
-        dispatch(receiveEntries(json.collection.items));
-        dispatch(toggleEntriesLoading());
-      });
+    console.log(localStorage.getItem('token'));
+    return isNil(localStorage.getItem('token')) ?
+      (
+        fetch(`https://images-api.nasa.gov/search?q=${query}&media_type=image`, {
+          method: 'GET',
+        })
+          .then(response => response.json())
+          .then(json => {
+            dispatch(receiveEntries(json.collection.items));
+            dispatch(toggleEntriesLoading());
+          })
+      ) :
+      (
+        Promise.all([fetch(`https://images-api.nasa.gov/search?q=${query}&media_type=image`, {
+          method: 'GET',
+        }), fetch(endpoints.entries, {
+          method: 'GET',
+          headers: headers.headers(),
+        })]).then(data => data.map(m => m.json()))
+          .then(data => {
+            console.log(data);
+          })
+      );
   };
 }
 
-export function fetchMyEntries() {
-  return (dispatch) => {
-    dispatch(toggleMyEntriesLoading());
-    return fetch(endpoints.entries, {
-      method: 'GET',
-      headers: headers.headers(),
-    })
-      .then(response => response.json())
-      .then(json => {
-        dispatch(receiveMyEntries(json));
-        dispatch(toggleMyEntriesLoading());
-      });
-  };
-}
 
 export function saveEntry(entry) {
   return (dispatch) => {

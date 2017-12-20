@@ -47,6 +47,7 @@ class Nav extends Component {
 
   render() {
     const token = this.props.usersData.get('token');
+    console.log(token);
     return (
       <div>
         <AppBar title="Pickit">

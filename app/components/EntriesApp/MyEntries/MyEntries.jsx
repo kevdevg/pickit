@@ -3,23 +3,27 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Entry from '../Entry/Entry';
 import style from './style.scss';
+import {isNil} from 'lodash/fp';
 
 class MyEntries extends Component {
 
   static propTypes = {
     fetchMyEntries: PropTypes.func.isRequired,
     entriesData: ImmutablePropTypes.map.isRequired,
+    usersData: ImmutablePropTypes.map.isRequired,
   };
 
-  fetchMyEntries = () => {
+  componentDidMount() {
     const { fetchMyEntries } = this.props;
-    fetchMyEntries(this.state.query);
-  };
+    const token = this.props.usersData.get('token');
+    if (!isNil(token)) {
+      fetchMyEntries();
+    }
+  }
 
   render() {
-    const my_entries = this.props.entriesData.get('my_entries');
-
-    const entriesItems = my_entries.map(entry => (
+    const myEntries = this.props.entriesData.get('myEntries');
+    const entriesItems = myEntries.map(entry => (
       <Entry
         entry={entry}
       />
@@ -33,7 +37,6 @@ class MyEntries extends Component {
       </div>
     );
   }
-
 }
 
 export default MyEntries;

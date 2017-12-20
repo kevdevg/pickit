@@ -5,7 +5,7 @@ const endpoints = {
   post: `${url}/post/`,
   login: `${url}/rest-auth/login/`,
   register: `${url}/rest-auth/registration/`,
-  entries: `${url}/entries`,
+  entries: `${url}/entries/`,
 };
 
 export default endpoints;

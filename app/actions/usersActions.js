@@ -8,6 +8,12 @@ export const toggleToken = (json) => (
   }
 );
 
+
+export const toggleLogoutUser = () => ({
+    type: 'LOGOUT_USER',
+});
+
+
 export const toggleUserLoading = () => ({
   type: 'TOGGLE_USER_LOADING',
 });
@@ -43,6 +49,7 @@ export function loginUser(user) {
     })
       .then(response => response.json())
       .then(json => {
+        localStorage.setItem('token', json.key);
         dispatch(toggleToken(json));
         dispatch(toggleUserLoading());
         dispatch(refreshUser());
@@ -53,9 +60,9 @@ export function loginUser(user) {
 export function logoutUser() {
   return (dispatch) => {
     dispatch(toggleUserLoading());
-    dispatch(toggleToken({key: undefined}));
+    localStorage.removeItem('token');
+    dispatch(toggleLogoutUser());
     dispatch(toggleUserLoading());
     dispatch(refreshUser());
-
   };
 }

@@ -19,17 +19,17 @@ export default function entriesData(state = initialState, action) {
     case ACTION_TYPES.RECEIVE_ENTRIES: {
       console.log(action);
       const totalResults = action.entries.length;
-      const entries = fromJS(action.entries).map(e => {
-        return fromJS({
+      const entries = fromJS(action.entries).map(e =>
+        fromJS({
           image: e.getIn(['links', 0, 'href']),
           tags: e.getIn(['data', 0, 'keywords']),
           date_created: e.getIn(['data', 0, 'date_created']),
           title: e.getIn(['data', 0, 'title']),
           description: e.getIn(['data', 0, 'description']),
           nasa_id: e.getIn(['data', 0, 'nasa_id']),
-          pick: false,
-        });
-      });
+          pick: true,
+        }),
+      );
       return state.withMutations(map => {
         map.set('entries', entries)
           .set('totalResults', totalResults)

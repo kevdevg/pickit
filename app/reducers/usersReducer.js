@@ -1,4 +1,4 @@
-import {fromJS} from "immutable";
+import {fromJS} from 'immutable';
 import ACTION_TYPES from "../actions/actionTypes";
 
 export const initialState = fromJS({
@@ -14,9 +14,11 @@ export default function usersData(state = initialState, action) {
       console.log(action);
       const token = action.json.key;
       console.log(token);
-      localStorage.setItem('token', token);
-      return state.set('token', token)
+      return state.set('token', token);
     }
+
+    case ACTION_TYPES.LOGOUT_USER:
+      return state.set('token', undefined);
 
     case ACTION_TYPES.REFRESH_USER:
       return state.set('refresh', true);
