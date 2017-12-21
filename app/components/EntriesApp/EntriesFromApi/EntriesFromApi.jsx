@@ -15,6 +15,7 @@ class EntriesFromApi extends Component {
     fetchEntries: PropTypes.func.isRequired,
     entriesData: ImmutablePropTypes.map.isRequired,
     saveEntry: PropTypes.func.isRequired,
+    deleteEntry: PropTypes.func.isRequired,
     usersData: ImmutablePropTypes.map.isRequired,
   };
 
@@ -36,6 +37,20 @@ class EntriesFromApi extends Component {
     saveEntry(entry)
   };
 
+  handleDeleteEntry = (entry) => {
+    const {deleteEntry} = this.props;
+    deleteEntry(entry)
+  };
+
+
+  componentWillReceiveProps(nextProps) {
+    const {entriesData} = nextProps;
+    if (!entriesData.get('entriesLoading') && entriesData.get('refresh')) {
+      this.fetchEntries();
+    }
+  }
+
+
   render() {
     const entries = this.props.entriesData.get('entries');
     const token = this.props.usersData.get('token');
@@ -46,6 +61,7 @@ class EntriesFromApi extends Component {
         entry={entry}
         key={entry.get('nasa_id')}
         saveEntry={this.saveEntry}
+        deleteEntry={this.handleDeleteEntry}
         userIsAuthenticated={userIsAuthenticated}
         className={style.medium_entry}
       />

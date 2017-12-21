@@ -18,8 +18,8 @@ class Entry extends Component {
   handleToggleEntry = () => {
     const { saveEntry, entry, deleteEntry } = this.props;
     entry.get('pick') ?
-      saveEntry(entry.toJS()) :
-      deleteEntry(entry.toJS())
+      deleteEntry(entry.toJS()) :
+      saveEntry(entry.toJS())
   };
 
   render(){
@@ -41,6 +41,7 @@ class Entry extends Component {
                 icon='favorite'
                 accent={entry.get('pick')}
                 tooltip={entry.get('pick') ? 'Tap to delete' : 'Tap to save'}
+                onClick={this.handleToggleEntry}
               />
             </CardActions>
           )

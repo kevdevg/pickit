@@ -1,7 +1,4 @@
 import React from 'react';
-import Link from 'react-toolbox/lib/link';
-import Nav from '../Nav/Nav';
-import Text from './Text';
 
 const Home = () =>
   (
